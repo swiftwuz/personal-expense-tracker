@@ -82,7 +82,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/UserLoginRequestBody"
                 }
               }
             }
@@ -421,6 +421,19 @@
               "type": "string",
               "example": "john doe"
             },
+            "email": {
+              "type": "string",
+              "example": "john@email.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "12345"
+            }
+          }
+        },
+        "UserLoginRequestBody": {
+          "type": "object",
+          "properties": {
             "email": {
               "type": "string",
               "example": "john@email.com"
