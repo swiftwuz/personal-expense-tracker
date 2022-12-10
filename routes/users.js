@@ -37,7 +37,7 @@ const userRoutes = (app, fs) => {
     }, true);
   });
 
-  app.get("/user/:id", (req, res) => {
+  app.get("/auth/user/:id/profile", (req, res) => {
     readFile((data) => {
       const userData = data.data;
       var result = userData.filter(function (userID) {
@@ -60,7 +60,7 @@ const userRoutes = (app, fs) => {
       data["data"].push(obj);
 
       writeFile(JSON.stringify(data, null, 2), () => {
-        res.status(200).send({ message: "new user added" });
+        res.status(201).send({ message: "new user added" });
       });
     }, true);
   });

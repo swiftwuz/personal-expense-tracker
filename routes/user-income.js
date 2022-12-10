@@ -46,7 +46,7 @@ const userIncomeRoutes = (app, fs) => {
       data["data"].push(obj);
 
       writeFile(JSON.stringify(data, null, 2), () => {
-        res.status(200).send({ message: "new income added" });
+        res.status(201).send({ message: "new income added" });
       });
     }, true);
   });

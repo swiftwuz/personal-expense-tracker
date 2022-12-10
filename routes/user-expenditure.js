@@ -47,7 +47,7 @@ const userExpenditureRoutes = (app, fs) => {
       data["data"].push(obj);
 
       writeFile(JSON.stringify(data, null, 2), () => {
-        res.status(200).send({ message: "new expenditure added" });
+        res.status(201).send({ message: "new expenditure added" });
       });
     }, true);
   });
