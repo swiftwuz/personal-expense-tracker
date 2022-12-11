@@ -1,3 +1,5 @@
+const crypto = require("crypto");
+
 const userExpenditureRoutes = (app, fs) => {
   const dataPath = "./data/expenditure.json";
 
