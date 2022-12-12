@@ -75,7 +75,7 @@
             "user"
           ],
           "summary": "Logs user into the system",
-          "description": "This endpoint is used to log a user in",
+          "description": "This endpoint is used to log a user in. It returns an accessToken which the client will use to authenticate requests.",
           "operationId": "loginUser",
           "requestBody": {
             "description": "Created user object",
