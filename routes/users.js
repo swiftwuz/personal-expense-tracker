@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 
 const userRoutes = (app, fs) => {
   const dataPath = "./data/users.json";
@@ -68,13 +69,22 @@ const userRoutes = (app, fs) => {
   app.post("/auth/login", (req, res) => {
     readFile((data) => {
       const userData = data["data"];
-      var result = userData.find(function (user) {
+      var user = userData.find(function (user) {
         return (
           user.password === req.body.password && user.email === req.body.email
         );
       });
-      if (result) {
-        return res.status(200).send({ message: "login successful!" });
+      if (user) {
+        const token = jwt.sign(
+          { user_id: user.id, email: user.email },
+          "randomString",
+          { expiresIn: "2h" }
+        );
+        return res.status(200).send({
+          message: "login successful!",
+          accessToken: token,
+          expiresIn: "2 hours",
+        });
       } else {
         return res.status(400).send({ message: "invalid credentials!" });
       }

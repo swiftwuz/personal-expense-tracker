@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const http = require("http");
 
 const userIncomeRoutes = (app, fs) => {
   const dataPath = "./data/income.json";
@@ -32,12 +33,18 @@ const userIncomeRoutes = (app, fs) => {
   };
 
   app.get("/user/income", (req, res) => {
+    if (!req.headers["authorization"]) {
+      res.status(401).send({ error: "Missing authentication header" });
+    }
     readFile((data) => {
       res.send(data);
     }, true);
   });
 
   app.post("/user/income", (req, res) => {
+    if (!req.headers["authorization"]) {
+      res.status(401).send({ error: "Missing authentication header" });
+    }
     readFile((data) => {
       const incomeID = crypto.randomUUID();
       obj = {
@@ -54,6 +61,9 @@ const userIncomeRoutes = (app, fs) => {
   });
 
   app.get("/user/income/:id", (req, res) => {
+    if (!req.headers["authorization"]) {
+      res.status(401).send({ error: "Missing authentication header" });
+    }
     readFile((data) => {
       const incomeData = data.data;
       var result = incomeData.filter(function (incomeID) {
@@ -65,6 +75,9 @@ const userIncomeRoutes = (app, fs) => {
   });
 
   app.delete("/user/income/:id", (req, res) => {
+    if (!req.headers["authorization"]) {
+      res.status(401).send({ error: "Missing authentication header" });
+    }
     readFile((data) => {
       const incomeID = req.params["id"];
       const incomeData = data.data;
