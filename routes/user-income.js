@@ -34,7 +34,7 @@ const userIncomeRoutes = (app, fs) => {
 
   app.get("/user/income", (req, res) => {
     if (!req.headers["authorization"]) {
-      res.status(401).send({ error: "Missing authentication header" });
+      return res.status(401).send({ error: "Missing authentication header" });
     }
     readFile((data) => {
       res.send(data);
@@ -43,7 +43,7 @@ const userIncomeRoutes = (app, fs) => {
 
   app.post("/user/income", (req, res) => {
     if (!req.headers["authorization"]) {
-      res.status(401).send({ error: "Missing authentication header" });
+      return res.status(401).send({ error: "Missing authentication header" });
     }
     readFile((data) => {
       const incomeID = crypto.randomUUID();
@@ -62,7 +62,7 @@ const userIncomeRoutes = (app, fs) => {
 
   app.get("/user/income/:id", (req, res) => {
     if (!req.headers["authorization"]) {
-      res.status(401).send({ error: "Missing authentication header" });
+      return res.status(401).send({ error: "Missing authentication header" });
     }
     readFile((data) => {
       const incomeData = data.data;
@@ -76,7 +76,7 @@ const userIncomeRoutes = (app, fs) => {
 
   app.delete("/user/income/:id", (req, res) => {
     if (!req.headers["authorization"]) {
-      res.status(401).send({ error: "Missing authentication header" });
+      return res.status(401).send({ error: "Missing authentication header" });
     }
     readFile((data) => {
       const incomeID = req.params["id"];

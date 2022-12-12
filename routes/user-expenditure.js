@@ -33,7 +33,7 @@ const userExpenditureRoutes = (app, fs) => {
 
   app.get("/user/expenditures", (req, res) => {
     if (!req.headers["authorization"]) {
-      res.status(401).send({ error: "Missing authentication header" });
+      return res.status(401).send({ error: "Missing authentication header" });
     }
     readFile((data) => {
       res.send(data);
@@ -42,7 +42,7 @@ const userExpenditureRoutes = (app, fs) => {
 
   app.post("/user/expenditure", (req, res) => {
     if (!req.headers["authorization"]) {
-      res.status(401).send({ error: "Missing authentication header" });
+      return res.status(401).send({ error: "Missing authentication header" });
     }
     readFile((data) => {
       const expenditureID = crypto.randomUUID();
@@ -62,7 +62,7 @@ const userExpenditureRoutes = (app, fs) => {
 
   app.get("/user/expenditure/:id", (req, res) => {
     if (!req.headers["authorization"]) {
-      res.status(401).send({ error: "Missing authentication header" });
+      return res.status(401).send({ error: "Missing authentication header" });
     }
     readFile((data) => {
       const expenditureData = data.data;
@@ -76,7 +76,7 @@ const userExpenditureRoutes = (app, fs) => {
 
   app.delete("/user/expenditure/:id", (req, res) => {
     if (!req.headers["authorization"]) {
-      res.status(401).send({ error: "Missing authentication header" });
+      return res.status(401).send({ error: "Missing authentication header" });
     }
     readFile((data) => {
       const expenditureID = req.params["id"];
