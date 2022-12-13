@@ -2,20 +2,16 @@
     "openapi": "3.0.3",
     "info": {
       "title": "Personal Expense Tracker",
-      "description": "This is a sample Personal Expense Tracker based on the OpenAPI 3.0 specification. Design an API to be used to track a user's expenses.",
-      "termsOfService": "http://swagger.io/terms/",
+      "description": "This is a sample Personal Expense Tracker based on the OpenAPI 3.0 specification.",
+      "termsOfService": "https://myladder.africa/terms-conditions",
       "contact": {
-        "email": "apiteam@swagger.io"
+        "email": "tech@myladder.africa"
       },
       "license": {
         "name": "Apache 2.0",
         "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
       },
       "version": "1.0.11"
-    },
-    "externalDocs": {
-      "description": "Find out more about Swagger",
-      "url": "http://swagger.io"
     },
     "servers": [
       {
