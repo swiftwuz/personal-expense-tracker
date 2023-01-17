@@ -31,7 +31,7 @@ const userExpenditureRoutes = (app, fs) => {
     });
   };
 
-  app.get("/user/expenditures", (req, res) => {
+  app.get("/user/expenditure", (req, res) => {
     if (!req.headers["authorization"]) {
       return res.status(401).send({ error: "Missing authentication header" });
     }
