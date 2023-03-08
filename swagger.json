@@ -15,7 +15,7 @@
     },
     "servers": [
       {
-        "url": "https://scarce-spark-production.up.railway.app"
+        "url": "https://personal-expense-tracker.up.railway.app"
       }
     ],
     "tags": [
