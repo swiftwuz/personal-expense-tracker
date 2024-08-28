@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-const routes = require("./routes/routes.js")(app, fs);
+require("./routes/routes.js")(app, fs);
 
 const server = app.listen(3000, () => {
   console.log("listening on port %s...", server.address().port);
