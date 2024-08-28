@@ -5,7 +5,7 @@ const fs = require("fs");
 const cors = require("cors");
 
 const swaggerUI = require("swagger-ui-express");
-swaggerDocument = require("./swagger.json");
+const swaggerDocument = require("./swagger.json");
 
 app.use(cors());
 
