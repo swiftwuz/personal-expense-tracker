@@ -1,5 +1,6 @@
-const crypto = require("crypto");
+const { uuid } = require("uuidv4");
 const jwt = require("jsonwebtoken");
+const uuid4 = require("uuid4");
 
 const userRoutes = (app, fs) => {
   const dataPath = "./data/users.json";
@@ -41,7 +42,7 @@ const userRoutes = (app, fs) => {
   app.get("/auth/user/:id/profile", (req, res) => {
     readFile((data) => {
       const userData = data.data;
-      var result = userData.filter(function (userID) {
+      const result = userData.filter(function (userID) {
         return userID.id == req.params["id"];
       });
       let [obj] = result;
@@ -51,8 +52,8 @@ const userRoutes = (app, fs) => {
 
   app.post("/auth/signup", (req, res) => {
     readFile((data) => {
-      const userID = crypto.randomUUID();
-      obj = {
+      const userID = uuid4();
+      const obj = {
         id: userID,
         name: req.body.name,
         email: req.body.email,
@@ -69,14 +70,14 @@ const userRoutes = (app, fs) => {
   app.post("/auth/login", (req, res) => {
     readFile((data) => {
       const userData = data["data"];
-      var user = userData.find(function (user) {
+      const user = userData.find(function (user) {
         return (
           user.password === req.body.password && user.email === req.body.email
         );
       });
       if (user) {
         const token = jwt.sign(
-          { user_id: user.id, email: user.email },
+          { userId: user.id, email: user.email },
           "randomString",
           { expiresIn: "2h" }
         );

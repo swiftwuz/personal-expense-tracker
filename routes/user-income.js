@@ -1,5 +1,5 @@
-const crypto = require("crypto");
-const http = require("http");
+const uuid4 = require("uuid4");
+const jwt = require("jsonwebtoken");
 
 const userIncomeRoutes = (app, fs) => {
   const dataPath = "./data/income.json";
@@ -36,8 +36,22 @@ const userIncomeRoutes = (app, fs) => {
     if (!req.headers["authorization"]) {
       return res.status(401).send({ error: "Missing authentication header" });
     }
+
+    const token = req.headers["authorization"].split(" ")[1];
+    let userID;
+    try {
+      const decoded = jwt.verify(token, "randomString");
+      userID = decoded.userId;
+    } catch (err) {
+      console.log(err);
+      return res.status(401).send({ error: "Invalid token" });
+    }
+
     readFile((data) => {
-      res.send(data);
+      const userIncomeData = data.data.filter(
+        (income) => income.user === userID
+      );
+      res.send(userIncomeData);
     }, true);
   });
 
@@ -45,12 +59,25 @@ const userIncomeRoutes = (app, fs) => {
     if (!req.headers["authorization"]) {
       return res.status(401).send({ error: "Missing authentication header" });
     }
+
+    const token = req.headers["authorization"].split(" ")[1];
+    let userID;
+    try {
+      const decoded = jwt.verify(token, "randomString");
+      userID = decoded.userId;
+    } catch (err) {
+      console.log(err);
+      return res.status(401).send({ error: "Invalid token" });
+    }
+
+    console.log(userID);
     readFile((data) => {
-      const incomeID = crypto.randomUUID();
-      obj = {
+      const incomeID = uuid4();
+      const obj = {
         id: incomeID,
         nameOfRevenue: req.body.nameOfRevenue,
         amount: req.body.amount,
+        user: userID,
       };
       data["data"].push(obj);
 
@@ -64,12 +91,28 @@ const userIncomeRoutes = (app, fs) => {
     if (!req.headers["authorization"]) {
       return res.status(401).send({ error: "Missing authentication header" });
     }
+
+    const token = req.headers["authorization"].split(" ")[1];
+    let userID;
+    try {
+      const decoded = jwt.verify(token, "randomString");
+      userID = decoded.userId;
+    } catch (err) {
+      console.log(err);
+      return res.status(401).send({ error: "Invalid token" });
+    }
+
     readFile((data) => {
-      const incomeData = data.data;
-      var result = incomeData.filter(function (incomeID) {
+      const userIncomeData = data.data.filter(
+        (income) => income.user === userID
+      );
+
+      const result = userIncomeData.filter(function (incomeID) {
         return incomeID.id == req.params["id"];
       });
+
       let [obj] = result;
+
       res.status(200).send(obj);
     }, true);
   });
@@ -78,13 +121,14 @@ const userIncomeRoutes = (app, fs) => {
     if (!req.headers["authorization"]) {
       return res.status(401).send({ error: "Missing authentication header" });
     }
+
     readFile((data) => {
       const incomeID = req.params["id"];
       const incomeData = data.data;
-      for (var i = 0; i < incomeData.length; i++) {
-        if (incomeData[i].id == incomeID) {
+      for (const entry of incomeData) {
+        if (entry.id == incomeID) {
           const filteredObjects = incomeData.filter(
-            (obj) => obj.id !== incomeData[i].id
+            (obj) => obj.id !== entry.id
           );
           data.data = [];
           data.data.push(...filteredObjects);

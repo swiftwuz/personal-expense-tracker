@@ -1,4 +1,5 @@
-const crypto = require("crypto");
+const uuid4 = require("uuid4");
+const jwt = require("jsonwebtoken");
 
 const userExpenditureRoutes = (app, fs) => {
   const dataPath = "./data/expenditure.json";
@@ -35,8 +36,22 @@ const userExpenditureRoutes = (app, fs) => {
     if (!req.headers["authorization"]) {
       return res.status(401).send({ error: "Missing authentication header" });
     }
+
+    const token = req.headers["authorization"].split(" ")[1];
+    let userID;
+    try {
+      const decoded = jwt.verify(token, "randomString");
+      userID = decoded.userId;
+    } catch (err) {
+      console.log(err);
+      return res.status(401).send({ error: "Invalid token" });
+    }
+
     readFile((data) => {
-      res.send(data);
+      const userExpenditureData = data.data.filter(
+        (expenditure) => expenditure.user === userID
+      );
+      res.send(userExpenditureData);
     }, true);
   });
 
@@ -44,13 +59,25 @@ const userExpenditureRoutes = (app, fs) => {
     if (!req.headers["authorization"]) {
       return res.status(401).send({ error: "Missing authentication header" });
     }
+
+    const token = req.headers["authorization"].split(" ")[1];
+    let userID;
+    try {
+      const decoded = jwt.verify(token, "randomString");
+      userID = decoded.userId;
+    } catch (err) {
+      console.log(err);
+      return res.status(401).send({ error: "Invalid token" });
+    }
+
     readFile((data) => {
-      const expenditureID = crypto.randomUUID();
-      obj = {
+      const expenditureID = uuid4();
+      const obj = {
         id: expenditureID,
         category: req.body.category,
         estimatedAmount: req.body.estimatedAmount,
         nameOfItem: req.body.nameOfItem,
+        user: userID,
       };
       data["data"].push(obj);
 
@@ -66,7 +93,7 @@ const userExpenditureRoutes = (app, fs) => {
     }
     readFile((data) => {
       const expenditureData = data.data;
-      var result = expenditureData.filter(function (expenditureID) {
+      const result = expenditureData.filter(function (expenditureID) {
         return expenditureID.id == req.params["id"];
       });
       let [obj] = result;
@@ -81,10 +108,10 @@ const userExpenditureRoutes = (app, fs) => {
     readFile((data) => {
       const expenditureID = req.params["id"];
       const expenditureData = data.data;
-      for (var i = 0; i < expenditureData.length; i++) {
-        if (expenditureData[i].id == expenditureID) {
+      for (const expenditure of expenditureData) {
+        if (expenditure.id == expenditureID) {
           const filteredObjects = expenditureData.filter(
-            (obj) => obj.id !== expenditureData[i].id
+            (obj) => obj.id !== expenditure.id
           );
           data.data = [];
           data.data.push(...filteredObjects);
